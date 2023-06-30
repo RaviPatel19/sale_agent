@@ -16,6 +16,7 @@ class SalesInvoice(models.Model):
           default=lambda self: self.env.company)
      commision_amount = fields.Monetary(compute='_compute_commision_amount',string='Commision Amount')
 
+
      @api.depends('partner_id')
      def _compute_agent_name(self):
           for agent in self:
@@ -36,12 +37,14 @@ class SalesInvoice(models.Model):
 
      def create_agent_bill(self):
           if self.agent_name_id:
+               defaut_product = self.env['res.company'].browse(self.company_id.id)
+               agent_product_id = defaut_product.agent_commision_product_id.id
                invoice = self.env['account.move'].create({'partner_id': self.agent_name_id.id,
                                                             'invoice_date':date.today(),
                                                             'currency_id': self.currency_id.id,
                                                             'move_type':'out_invoice',
                                                             'invoice_payment_term_id': self.payment_term_id.id,
-                                                            'invoice_line_ids': [Command.create({'product_id': self.env['res.config.settings'], 'price_unit':self.commision_amount})]
+                                                            'invoice_line_ids': [Command.create({'product_id': agent_product_id, 'price_unit': self.commision_amount})]
                                                             })
                return{
                     'type': 'ir.actions.act_window',
