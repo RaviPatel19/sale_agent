@@ -1,4 +1,6 @@
-from odoo import models, api, fields
+from odoo import models, api, fields, Command
+from datetime import date
+from odoo.exceptions import UserError
 
 
 class SalesInvoice(models.Model):
@@ -33,4 +35,20 @@ class SalesInvoice(models.Model):
                order.commision_amount = commision
 
      def create_agent_bill(self):
-          pass
+          if self.agent_name_id:
+               invoice = self.env['account.move'].create({'partner_id': self.agent_name_id.id,
+                                                            'invoice_date':date.today(),
+                                                            'currency_id': self.currency_id.id,
+                                                            'move_type':'out_invoice',
+                                                            'invoice_payment_term_id': self.payment_term_id.id,
+                                                            'invoice_line_ids': [Command.create({'product_id': self.env['res.config.settings'], 'price_unit':self.commision_amount})]
+                                                            })
+               return{
+                    'type': 'ir.actions.act_window',
+                    'view_mode': 'form',
+                    'res_model':'account.move',
+                    'target': 'new',
+                    'res_id': invoice.id}
+          raise UserError("Agent Bill Is Not Required")
+          # print('---------------------------------------------------',invoice,
+          #           invoice.partner_id.name, invoice.invoice_payment_term_id)
