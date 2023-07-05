@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-     <record id="action_report_sale_order" model="ir.actions.report">
-          <field name="name">Sale Order</field>
-          <field name="model">sale.order</field>
-          <field name="report_type">qweb-pdf</field>
-          <field name="report_name">Sales_Agent.sale_order</field>
-          <field name="report_file">Sales_Agent.sale_order</field>
-          <field name="binding_model_id" ref="model_sale_order"/>
-          <field name="binding_type">report</field>
-     </record>
+    <record id="action_report_sale_order" model="ir.actions.report">
+        <field name="name">Sale Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">Sales_Agent.sale_order</field>
+        <field name="report_file">Sales_Agent.sale_order</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
 
-     <template id="Sale_order" name="Sale Order" inherit_id="sale.report_saleorder_document">
-          <xpath expr="//div[@t-if='doc.user_id.name']" position="after">
-               <div t-if="doc.agent_name_id" class="col-auto col-3 mw-100 mb-2">
-                    <strong>Agent:</strong>
-                    <p class="m-0" t-esc="doc.agent_name_id.name"/>
+    <template id="Sale_order" name="Sale Order" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@t-if='doc.user_id.name']" position="after">
+            <div t-if="doc.agent_name_id" class="col-auto col-3 mw-100 mb-2">
+                <strong>Agent:</strong>
+                <p class="m-0" t-esc="doc.agent_name_id.name"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="agent_commision"  inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@id='total']" position="after">
+            <div class="row text-end" name="commision">
+                <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td><strong>Commision Amount:-</strong></td>
+                                <td><t t-esc="doc.commision_amount" t-options='{"widget":"monetary", "display_currency": doc.currency_id}'/></td>
+                            </tr>
+                        </table>
                 </div>
-          </xpath>
-     </template>
-     <template id="agent_commision"  inherit_id="sale.report_saleorder_document">
-          <xpath expr="//div[@id='total']" position="after">
-               <div class="row text-end" name="commision">
-                    <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
-                         <table class="table table-sm table-borderless">
-                              <tr>
-                                   <td><strong>Commision Amount:-</strong></td>
-                                   <td><t t-esc="doc.commision_amount" t-options='{"widget":"monetary", "display_currency": doc.currency_id}'/></td>
-                              </tr>
-                         </table>
-                    </div>
-               </div>
-          </xpath>
-     </template>
+            </div>
+        </xpath>
+    </template>
 
-     <record id="sale_agent_bill_inherit_sale_order" model="ir.ui.view">
-          <field name="name">sale.order.view.form.inherit</field>
-          <field name="model">sale.order</field>
-          <field name="inherit_id" ref="sale.view_order_form"/>
-          <field name="arch" type="xml">
-               <xpath expr="//button[@name='action_cancel']" position="after">
-                    <button string="Create Agent Bill" name="create_agent_bill" type="object"/>
-               </xpath>
-          </field>
-     </record>
+    <record id="sale_agent_bill_inherit_sale_order" model="ir.ui.view">
+        <field name="name">sale.order.view.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel']" position="after">
+                <button string="Create Agent Bill" name="create_agent_bill" type="object" attrs="{'invisible': [('agent_name_id', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
