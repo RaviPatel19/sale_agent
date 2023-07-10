@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
             string="Agent Name", 
             compute='_compute_agent_name',
             store=True, readonly=False)
-    commision = fields.Integer(compute='_compute_commission', string='Commission', readonly=False, store=True)
+    commission = fields.Integer(compute='_compute_commission', string='Commission', readonly=False, store=True)
     commission_amount = fields.Monetary(compute='_compute_commission_amount',string='Commission Amount')
     invoice_count = fields.Integer(compute='_compute_get_agent_invoiced_count')
     agent_bill_state = fields.Selection([
@@ -24,7 +24,7 @@ class SaleOrder(models.Model):
     amount_paid_agent = fields.Float(
             compute='_compute_amount_paid_to_agent', 
             string='Amount Paid To Agent')
-    pcercentage_of_commision_paid_to_agent = fields.Float(compute='_compute_paid_agent_commision_percentge',string='Percentage Of Commison Paid To Agent')
+    pcercentage_of_commission_paid_to_agent = fields.Float(compute='_compute_paid_agent_commission_percentge',string='Percentage Of Commison Paid To Agent')
 
     def _compute_amount_paid_to_agent(self):
         agent_bill_record = self.agent_invoice_ids
@@ -43,12 +43,12 @@ class SaleOrder(models.Model):
     def _compute_commission(self):
             for agent in self:
                 commission_percentage = agent.partner_id.commission_percentage
-                self.commision = commission_percentage*100
+                self.commission = commission_percentage*100
 
-    @api.depends('amount_total', 'commision')
+    @api.depends('amount_total', 'commission')
     def _compute_commission_amount(self):
             for order in self:
-                commission=(order.amount_total*order.commision)/100
+                commission = (order.amount_total*order.commission)/100
                 order.commission_amount = commission
 
     def create_agent_bill(self):
@@ -73,7 +73,7 @@ class SaleOrder(models.Model):
             action['views'] = [(False, 'form')]
             return action
         else:
-            raise UserError('There Is No Product In Order Line Or Commision Amount Is Not Zero')
+            raise UserError('There Is No Product In Order Line Or Commission Amount Is Not Zero')
 
     def _compute_get_agent_invoiced_count(self):
         self.invoice_count = len(self.agent_invoice_ids)
@@ -88,16 +88,16 @@ class SaleOrder(models.Model):
     def _compute_agent_bill_state(self):
             self.agent_bill_state = 'draft'
 
-    def _compute_paid_agent_commision_percentge(self):
+    def _compute_paid_agent_commission_percentge(self):
         agent_bill_record = self.agent_invoice_ids
         total_agent_bill_amount = 0
-        percentage_of_commision_paid_to_agent = 0
+        percentage_of_commission_paid_to_agent = 0
         for agent_bill_amount in agent_bill_record:
             total_agent_bill_amount += agent_bill_amount.amount_total_signed
             if agent_bill_amount.state == 'posted':
-                percentage_of_commision_paid_to_agent += agent_bill_amount.invoice_line_ids.price_total
+                percentage_of_commission_paid_to_agent += agent_bill_amount.invoice_line_ids.price_total
         if total_agent_bill_amount:
-            cal_percentage_of_agent_bill_paid = (percentage_of_commision_paid_to_agent)/total_agent_bill_amount
-            self.pcercentage_of_commision_paid_to_agent = cal_percentage_of_agent_bill_paid
+            cal_percentage_of_agent_bill_paid = (percentage_of_commission_paid_to_agent)/total_agent_bill_amount
+            self.pcercentage_of_commission_paid_to_agent = cal_percentage_of_agent_bill_paid
         else:
-            self.pcercentage_of_commision_paid_to_agent = 0
+            self.pcercentage_of_commission_paid_to_agent = 0

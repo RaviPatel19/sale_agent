@@ -8,7 +8,7 @@
           <field name="arch" type="xml">
                <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="agent_id" />
-                    <field name="commision" />
+                    <field name="commission" />
                     <field name="commission_amount" attrs="{'invisible':[('agent_id','=',False)]}" />
                </xpath>
           </field>
@@ -75,13 +75,13 @@
           </field>
      </record>
 
-     <record id="percentage_of_commision_paid_to_agent_inherit_module_name" model="ir.ui.view">
+     <record id="percentage_of_commission_paid_to_agent_inherit_module_name" model="ir.ui.view">
           <field name="name">sale.order.view.form.inherit</field>
           <field name="model">sale.order</field>
           <field name="inherit_id" ref="sale.view_order_form"/>
           <field name="arch" type="xml">
                <field name="amount_paid_agent" position='after'>
-                    <field name="pcercentage_of_commision_paid_to_agent" widget="percentage" />
+                    <field name="pcercentage_of_commission_paid_to_agent" widget="percentage" />
                </field>
           </field>
      </record>
