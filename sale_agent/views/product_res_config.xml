@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="product_from_inherit_res_config_settings" model="ir.ui.view">
+          <field name="name">res.config.settings.view.form.inherit</field>
+          <field name="model">res.config.settings</field>
+          <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+          <field name="arch" type="xml">
+               <div id="proforma_configuration" position="after">
+                    <div class="col-12 col-lg-6 o_setting_box" id="sale_agent_configuration">
+                         <div class="content-group">
+                              <div class="mt16">
+                                   <label for="product_id" class="o_light_label"/>
+                                   <field name="product_id" class="oe_inline"/>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+          </field>
+     </record>
+
+</odoo>
