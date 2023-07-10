@@ -41,8 +41,9 @@ class SaleOrder(models.Model):
 
     @api.depends('partner_id')
     def _compute_commission(self):
-            commission_percentage = self.partner_id.commission_percentage
-            self.commision = commission_percentage*100
+            for agent in self:
+                commission_percentage = agent.partner_id.commission_percentage
+                self.commision = commission_percentage*100
 
     @api.depends('amount_total', 'commision')
     def _compute_commission_amount(self):
