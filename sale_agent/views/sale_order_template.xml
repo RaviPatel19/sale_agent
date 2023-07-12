@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- <record id="action_report_sale_order" model="ir.actions.report">
-        <field name="name">Sale Order</field>
-        <field name="model">sale.order</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">Sales_Agent.sale_order</field>
-        <field name="report_file">Sales_Agent.sale_order</field>
-        <field name="binding_model_id" ref="model_sale_order"/>
-        <field name="binding_type">report</field>
-    </record> -->
-
     <template id="Sale_order" name="Sale Order" inherit_id="sale.report_saleorder_document">
         <xpath expr="//div[@t-if='doc.user_id.name']" position="after">
             <div t-if="doc.agent_id" class="col-auto col-3 mw-100 mb-2">
@@ -34,5 +24,6 @@
             </div>
         </xpath>
     </template>
+    
 
 </odoo>

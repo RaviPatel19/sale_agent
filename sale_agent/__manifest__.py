@@ -2,7 +2,7 @@
     'name':'Sales Agent',
     'summary':'Sales Agent Commission',
     'devloper':'Ravi',
-    'depends': ['base', 'sale'],
+    'depends': ['sale'],
     'license': 'LGPL-3',
     'data':['security/ir.model.access.csv',
             'views/res_partner.xml',

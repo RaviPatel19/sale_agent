@@ -10,8 +10,8 @@
                     <div class="col-12 col-lg-6 o_setting_box" id="sale_agent_configuration">
                          <div class="content-group">
                               <div class="mt16">
-                                   <label for="product_id" class="o_light_label"/>
-                                   <field name="product_id" class="oe_inline"/>
+                                   <label for="commission_product_id" class="o_light_label"/>
+                                   <field name="commission_product_id" class="oe_inline"/>
                               </div>
                          </div>
                     </div>
