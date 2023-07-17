@@ -25,6 +25,7 @@ class SaleOrder(models.Model):
             compute='_compute_amount_paid_agent', 
             string='Amount Paid To Agent')
     pcercentage_of_commission_paid_to_agent = fields.Float(compute='_compute_paid_agent_commission_percentge',string='Percentage Of Commison Paid To Agent')
+    consumer_note = fields.Html(string='Consumer Note')
 
     def _compute_amount_paid_agent(self):
         for order_id in self:

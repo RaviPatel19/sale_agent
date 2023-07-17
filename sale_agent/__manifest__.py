@@ -1,7 +1,7 @@
 {
     'name':'Sales Agent',
     'summary':'Sales Agent Commission',
-    'devloper':'Ravi',
+    'author':'Ravi',
     'depends': ['sale'],
     'license': 'LGPL-3',
     'data':['security/ir.model.access.csv',
