@@ -10,8 +10,9 @@ class SaleOrder(models.Model):
             string="Agent", 
             compute='_compute_agent_id',
             store=True, readonly=False)
-    commission = fields.Float(compute='_compute_commission', string='Commission %', readonly=False, store=True)
-    commission_amount = fields.Monetary(compute='_compute_commission_amount',string='Commission Amount')
+    commission = fields.Float(compute='_compute_commission',
+                            string='Commission %', readonly=False, store=True)
+    commission_amount = fields.Monetary(compute='_compute_commission_amount', string='Commission Amount')
     invoice_count = fields.Integer(compute='_compute_get_agent_invoiced_count')
     agent_bill_state = fields.Selection([
             ('draft','Draft'),
@@ -23,7 +24,7 @@ class SaleOrder(models.Model):
     agent_invoice_ids = fields.One2many('account.move', 'sale_order_id', string='Agent Bill')
     amount_paid_agent = fields.Float(
             compute='_compute_amount_paid_agent', 
-            string='Amount Paid To Agent')
+        string='Amount Paid To Agent')
     pcercentage_of_commission_paid_to_agent = fields.Float(compute='_compute_paid_agent_commission_percentge',string='Percentage Of Commison Paid To Agent')
     consumer_note = fields.Html(string='Consumer Note')
 
@@ -92,3 +93,14 @@ class SaleOrder(models.Model):
                 order_id.pcercentage_of_commission_paid_to_agent = order_id.amount_paid_agent / total_bill_amount
             else:
                 order_id.pcercentage_of_commission_paid_to_agent = 0
+
+    def write(self, vals):
+        if vals.get('consumer_note'):
+            for order_id in self:
+                if not order_id.consumer_note:
+                    order_id.activity_schedule(
+                        'mail.mail_activity_data_todo',
+                        user_id=order_id.user_id.id,
+                        note=vals.get('consumer_note')
+                        )
+        return super().write(vals)

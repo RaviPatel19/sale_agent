@@ -9,7 +9,8 @@
             'views/sale_order_template.xml',
             # 'views/sales_order_template.xml',
             'views/sale_order.xml',
-            'views/res_config_setting.xml'
+            'views/res_config_setting.xml',
+            'views/stock_picking.xml',
+            'views/report_stockpicking_opration.xml'
             ]
-
 }

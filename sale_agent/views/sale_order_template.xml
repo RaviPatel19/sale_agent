@@ -25,16 +25,16 @@
         </xpath>
     </template>
 
-    <template id="from_sumbit" name="template_name" inherit_id="sale.sale_order_portal_content">
+    <template id="form_sumbit" name="template_name" inherit_id="sale.sale_order_portal_content">
         <div id="agent" position="after">
-            <div>
-                <form class="form-group" method="post" action="/dr_consumer_note">
+            <div class="col-12">
+                <form class="form-group" method="post" action="/dr_consumer_note" t-att-data-order-id="sale_order.id">
+                    <input type="hidden" name ="access_token" t-att-value="sale_order.access_token"/>
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                     <input type="hidden" name="sale_order_id" t-att-value="sale_order.id"/>
                     <label for="consumer_note">Consumer Notes:</label>
                     <textarea name="consumer_note" class="form-control" placeholder="Consumer Feedback" t-att-readonly="'readonly' if sale_order.state =='sale' else None" />
-                    <button type="submit" value="Submit" class="btn btn-primary mt-1"> Submit </button>
-                        
+                    <button  type="submit" value="Submit"  class="btn btn-primary mt-1"> Submit </button>
                 </form>
             </div>
         </div>

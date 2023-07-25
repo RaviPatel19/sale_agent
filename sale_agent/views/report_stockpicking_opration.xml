@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <template id="add_consumer_note" inherit_id="stock.report_picking">
+          <h1 t-field="o.name" position="before">
+               <p class="mb-0"> <strong>Consumer Note :-</strong></p>
+               <p class="mb-0" t-field="o.consumer_note"/>
+          </h1>
+     </template>
+
+</odoo>
